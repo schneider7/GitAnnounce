@@ -10,6 +10,7 @@ module GitAnnounce
       link        = request_payload['pull_request']['url']
       action_done = request_payload['pull_request']['action']
       repo_name   = request_payload['pull_request']['head']['repo']['name']
+      number      = request_payload['pull_request']['number']
       
       
       if action_done == "labeled"
