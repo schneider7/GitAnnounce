@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.version     = GitAnnounce::VERSION
   spec.authors     = ["Mike Schneider"]
   spec.email       = ["mschneider3254@gmail.com"]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of GitAnnounce."
-  spec.description = "TODO: Description of GitAnnounce."
+  spec.homepage    = ""
+  spec.summary     = ""
+  spec.description = ""
   spec.license     = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
