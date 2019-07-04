@@ -1,5 +1,5 @@
 module GitAnnounce
-  class Controller < ApplicationController
+  class MessagesController < ApplicationController
     
     def create
 
