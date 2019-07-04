@@ -20,7 +20,7 @@ module GitAnnounce
 
       elsif action_done == "unlabeled"
         full_message = "#{editor} removed a label on pull request #{number} in [#{repo_name}](#{link})"
-        Http.zulip_message(repo_naSme, full_message)
+        Http.zulip_message(repo_name, full_message)
         
       end
       
