@@ -10,7 +10,7 @@ module GitAnnounce
       #Bot email is github-updates-bot@zulip.sycamoreeducation.com
       #Bot key is 2nwoBCfZHkghL6paI7j9PIY8th03K54T
       request = Net::HTTP::Post.new(uri) 
-      request.basic_auth('github-updates-bot@zulip.sycamoreeducation.com', '2nwoBCfZHkghL6paI7j9PIY8th03K54T') 
+      request.basic_auth(ENV["BOT_EMAIL"], ENV["BOT_API_KEY"]) 
       request.body = "type=stream&to=#{stream_name}&subject=#{repo_name}&content=#{content}" 
       
       req_options = { use_ssl: uri.scheme == "https", } 
