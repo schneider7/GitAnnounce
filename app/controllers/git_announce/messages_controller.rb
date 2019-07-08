@@ -10,17 +10,18 @@ module GitAnnounce
       editor      = request_payload['pull_request']['user']['login']
       number      = request_payload['number']
       repo_name   = request_payload['pull_request']['head']['repo']['name']
+      title       = request_payload['pull_request']['title']
       link        = request_payload['pull_request']['_links']['html']['href']
          
       # Rails.logger.debug 
       #   "#{editor}, #{link}, #{action_done}, #{repo_name}, #{number}"
       
       if action_done == "labeled"
-        full_message = "#{editor} added a label on pull request #{number} in [#{repo_name}](#{link})"
+        full_message = "#{editor} added a label on PR ##{number} in #{repo_name},[#{title}](#{link})"
         Http.zulip_message("sycamoreeducation", "GitHub Notifications", repo_name, full_message)        
 
       elsif action_done == "unlabeled"
-        full_message = "#{editor} removed a label on pull request #{number} in [#{repo_name}](#{link})"
+        full_message = "#{editor} removed a label on PR ##{number} in #{repo_name},[#{title}](#{link})"
         Http.zulip_message("sycamoreeducation", "GitHub Notifications", repo_name, full_message)
         
       end
