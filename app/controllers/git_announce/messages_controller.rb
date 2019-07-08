@@ -6,11 +6,11 @@ module GitAnnounce
       request.body.rewind
       request_payload = JSON.parse(request.body.read)
 
-      action_done = request_payload['action'] 
+      action_done = request_payload['action']
       editor      = request_payload['pull_request']['user']['login']
       repo_name   = request_payload['pull_request']['head']['repo']['name']
-      label       = request_payload['pull_request']['label']['name']
-      title       = request_payload['pull_request']['title']
+      label       = request_payload['label']['name']
+      title       = request_payload['pull_request']['title'] 
       link        = request_payload['pull_request']['_links']['html']['href']
          
       # Rails.logger.debug 
