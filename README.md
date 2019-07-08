@@ -43,7 +43,7 @@ Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigat
  - `ENV["BOT_EMAIL"]` is the "email" of the bot you just made, that will post the updates.
  - `ENV["BOT_API_KEY"]` is the Zulip API key for the bot you just made.
 
-Configure these four environment variables to match your organization's info, and the engine will do the rest.
+Configure these four environment variables to match your organization and bot's info, and the engine will do the rest.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
