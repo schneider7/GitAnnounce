@@ -10,8 +10,7 @@ module GitAnnounce
       request.basic_auth(ENV["BOT_EMAIL"], ENV["BOT_API_KEY"]) 
       request.body = "type=stream&to=#{stream_name}&subject=#{repo_name}&content=#{content}" 
       
-      req_options = { use_ssl: uri.scheme == "https", } 
-      
+      req_options = { use_ssl: uri.scheme == "https", }       
       response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
         http.request(request) 
       end 

@@ -13,9 +13,6 @@ module GitAnnounce
       title       = request_payload['pull_request']['title'] 
       link        = request_payload['pull_request']['_links']['html']['href']
          
-      # Rails.logger.debug 
-      #   "#{editor}, #{link}, #{action_done}, #{repo_name}, #{number}"
-      
       if action_done == "labeled"
         full_message = "#{editor} added the '#{label}' label on [#{title}](#{link}) in #{repo_name}."
         Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)        
