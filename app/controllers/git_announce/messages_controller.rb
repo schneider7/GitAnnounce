@@ -17,11 +17,11 @@ module GitAnnounce
       #   "#{editor}, #{link}, #{action_done}, #{repo_name}, #{number}"
       
       if action_done == "labeled"
-        full_message = "#{editor} added a label on PR ##{number} in #{repo_name},[#{title}](#{link})"
-        Http.zulip_message("sycamoreeducation", "GitHub Notifications", repo_name, full_message)        
+        full_message = "#{editor} added a label on PR ##{number} in #{repo_name}. Link: [#{title}](#{link})"
+        Http.zulip_message("sycamoreeducation", ENV["STREAM_NAME"], repo_name, full_message)        
 
       elsif action_done == "unlabeled"
-        full_message = "#{editor} removed a label on PR ##{number} in #{repo_name},[#{title}](#{link})"
+        full_message = "#{editor} removed a label on PR ##{number} in #{repo_name}. Link: [#{title}](#{link})"
         Http.zulip_message("sycamoreeducation", "GitHub Notifications", repo_name, full_message)
         
       end
