@@ -3,7 +3,7 @@ require 'net/http'
 module GitAnnounce
   module Http
 
-    def self.zulip_message(domain, content)
+    def self.zulip_message(domain, stream_name, repo_name, content)
       uri = URI.parse("https://zulip.#{domain}.com/api/v1/messages")
       
 
@@ -11,7 +11,7 @@ module GitAnnounce
       #Bot key is 2nwoBCfZHkghL6paI7j9PIY8th03K54T
       request = Net::HTTP::Post.new(uri) 
       request.basic_auth("github-updates-bot@zulip.sycamoreeducation.com", "2nwoBCfZHkghL6paI7j9PIY8th03K54T") 
-      request.body = "type=stream&to=GitHub Notifications&subject=Repo Name Here&content=#{content}" 
+      request.body = "type=stream&to=#{stream_name}&subject=#{repo_name}&content=#{content}" 
       
       req_options = { use_ssl: uri.scheme == "https", } 
       
