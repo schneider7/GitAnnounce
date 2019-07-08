@@ -3,8 +3,8 @@ require 'net/http'
 module GitAnnounce
   module Http
 
-    def self.zulip_message(content)
-      uri = URI.parse("https://zulip.sycamoreeducation.com/api/v1/messages")
+    def self.zulip_message(domain, content)
+      uri = URI.parse("https://zulip.#{domain}.com/api/v1/messages")
       
 
       #Bot email is mgithub-updates-bot@zulip.sycamoreeducation.co
