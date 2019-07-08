@@ -1,9 +1,5 @@
 # GitAnnounce
 GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when you add/remove labels on a GitHub repo. 
-Motivation is that GitHub does not send out notifications when labels are added/removed.
-This engine allows development teams to set up a stream on Zulip specifically for the purpose of keeping a running flow of reminders when other developers make changes.
-
-Author: [Michael Schneider](https://michaelschneider.me)
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -26,7 +22,7 @@ Add the following `mount` line to `routes.rb`, in your Rails app:
 
 Via the engine, this creates a `POST` route to handle the webhooks received at `/git_announce`.
 
-Now set up an outgoing webhook request from GitHub on each of the repos you'd like to "listen" to.
+Now set up an outgoing webhook request from GitHub **on each of the repos you'd like to "listen" to.**
 
   - Navigate to the page for setting up webhooks within your repo: `(Repo) Settings > Webhooks > Add Webhook` 
 
