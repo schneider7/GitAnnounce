@@ -50,7 +50,7 @@ Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigat
  - `ENV["BOT_EMAIL"]` is the "email" of the bot you just made, that will post the updates.
  - `ENV["BOT_API_KEY"]` is the Zulip API key for the bot you just made.
 
- You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create a hash as shown below, and populate it with your development team's information:
+ You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create a config hash and array as shown below, and populate it with your development team's information:
 
  ```ruby
 GitAnnounce.developers = {
