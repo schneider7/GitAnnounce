@@ -16,13 +16,13 @@ module GitAnnounce
       if action_done == "labeled"
         name_as_string = owner.to_s
         name = GitAnnounce.developers[name_as_string.to_sym]
-        full_message = "@**#{name}**, a `#{label}` label was added to your PR:  [#{title}](#{link})."
+        full_message = "@**#{name}**,  a `#{label}` label was added to your PR:  [#{title}](#{link})."
         Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)        
 
       elsif action_done == "unlabeled"
         name_as_string = owner.to_s
         name = GitAnnounce.developers[name_as_string.to_sym]
-        full_message = "@**#{name}**, a `#{label}` label was removed from your PR:  [#{title}](#{link})."
+        full_message = "@**#{name}**,  a `#{label}` label was removed from your PR:  [#{title}](#{link})."
         Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)
         
       end
