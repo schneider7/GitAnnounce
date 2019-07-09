@@ -44,14 +44,14 @@ module GitAnnounce
       name_as_string = owner.to_s
       name = GitAnnounce.developers[name_as_string.to_sym]
 
-      unless GitAnnounce.ignore.include?(sender)
+      unless GitAnnounce.ignore.include?(sender) # Ignore automatic changes by bots
 
         # If label is added
         if action_done == 'labeled'
 
           # Special Case
           if label == "!"
-            full_message = "@**all** -- The `'!'` label was just added. [#{title}](#{link}) needs urgent attention."
+            full_message = "@**all** -- The `'!'` label was just added. [#{title}](#{link}) needs attention immediately."
 
           # Normal Case
           else
