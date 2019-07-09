@@ -35,7 +35,7 @@ module GitAnnounce
       sender        = payload['sender']['login']
 
       # Making sure message is grammatically correct
-      if ['a','e','i','o','u'].include?(label[0]) # If first letter of label is a vowel
+      if ['A','E','I','O','U'].include?(label[0]) # If first letter of label is a vowel
         article = "an"
       else
         article = "a"
