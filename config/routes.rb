@@ -1,3 +1,3 @@
 GitAnnounce::Engine.routes.draw do
-  post '/', to: "messages#create"
+  post '/', to: "messages#process"
 end

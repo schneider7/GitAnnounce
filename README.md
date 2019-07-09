@@ -1,6 +1,13 @@
 # GitAnnounce
 GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when you add/remove labels on a GitHub repo. 
 
+
+## Usage
+
+This engine will send out Zulip messages of the following form:
+
+@ User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
+
 ## Installation
 Add this line to your application's Gemfile:
 
@@ -43,7 +50,24 @@ Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigat
  - `ENV["BOT_EMAIL"]` is the "email" of the bot you just made, that will post the updates.
  - `ENV["BOT_API_KEY"]` is the Zulip API key for the bot you just made.
 
-Configure these four environment variables to match your organization and bot's info, and the engine will do the rest.
+ You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create a hash as shown below, and populate it with your development team's information:
+
+ ```ruby
+GitAnnounce.developers = {
+  schneider7: "Michael Schneider",
+  githubusername: "Firstname Lastname",
+  user3: "Johnny Test"
+}
+
+# Ignoring changes made automatically by bots. Usually changes made by 
+# bots aren't worth notifying someone about, because they were small to begin with.
+GitAnnounce.ignore = ["bot_account1", "bot_account2"]
+
+```
+
+ This is so that the GitHub usernames will get matched to the real names of the developers, which will make the Zulip messages more human-readable. **Make sure that the full names defined by this hash are the same as the full names used in Zulip.** For example, if I had written "Mike Schneider" as my name in the hash, the engine wouldn't properly tag me in Zulip messages, because my name there is set up as "Michael Schneider".
+
+Configure these four environment variables and the hash to match your organization and bot's info, and the engine will do the rest.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
