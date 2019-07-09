@@ -14,14 +14,14 @@ module GitAnnounce
       link        = request_payload['pull_request']['_links']['html']['href']
          
       if action_done == "labeled"
-        symbolized_owner = owner.to_sym
-        name = GitAnnounce.developers[symbolized_owner]
+        name_as_string = owner.to_s
+        name = GitAnnounce.developers[name_as_string.to_sym]
         full_message = "@#{name}, a `#{label}` label was added to your PR [#{title}](#{link})."
         Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)        
 
       elsif action_done == "unlabeled"
-        symbolized_owner = owner.to_sym
-        name = GitAnnounce.developers[symbolized_owner]
+        name_as_string = owner.to_s
+        name = GitAnnounce.developers[name_as_string.to_sym]
         full_message = "#{editor}, a `#{label}` label was removed from your PR [#{title}](#{link})."
         Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)
         
