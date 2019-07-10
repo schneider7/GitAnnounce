@@ -1,12 +1,12 @@
 # GitAnnounce
-GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when you add/remove labels on a GitHub repo. 
+GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when someone makes changes on a GitHub PR. 
 
 
 ## Usage
 
 This engine will send out Zulip messages of the following form:
 
-@ User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
+@User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
 
 ## Installation
 Add this line to your application's Gemfile:
