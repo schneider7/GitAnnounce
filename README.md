@@ -1,6 +1,8 @@
 # GitAnnounce
 GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when someone makes changes on a GitHub PR. 
 
+If you're interested in the code (e.g. to adapt this engine for your own needs), it's located primarily in `app/controllers/messages_controller.rb` and `app/lib/http.rb`.
+
 
 ## Usage
 
