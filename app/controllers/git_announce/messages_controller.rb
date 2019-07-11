@@ -28,15 +28,13 @@ module GitAnnounce
         unless GitAnnounce.ignore.include?(sender)
           name = GitAnnounce.developers[owner.to_s.to_sym]
 
-          if action_done == "labeled"    
+          case action_done
+          when 'labeled'    
             full_message = "@**#{name}**,  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."    
 
-          elsif action_done == "unlabeled"
+          when 'unlabeled'
             full_message = "@**#{name}**,  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
-
-          end
-          Http.zulip_message(ENV["ZULIP_DOMAIN"], ENV["STREAM_NAME"], repo_name, full_message)
-          head :ok
+          end # case
         end # unless
 
       when 'issue_comment'
@@ -49,11 +47,8 @@ module GitAnnounce
         # If comment is made on PR
         if action_done == "created"
           name = GitAnnounce.developers[owner.to_s.to_sym]
-          full_message = "@**#{name}**, someone left a comment on your PR '#{title}'. Read it [here](#{link})"
+          full_message = "@**#{name}**, someone left a comment on your PR [#{title}](#{link})."
         end
-
-        Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
-        head :ok
 
       when 'pull_request_review'
         action_done = request_payload['action']
@@ -71,12 +66,13 @@ module GitAnnounce
           when 'changes_requested'
             full_message = "@**#{name}**, changes were requested on your PR (`#{title}`). Read the comments [here](#{link})"
           end
-        end
-
-        Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
-        head :ok
+        end #if
 
       end # when
+
+      Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
+      head :ok
+      
     end # function
   end # class
 end # module
