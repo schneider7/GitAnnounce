@@ -38,7 +38,26 @@ module GitAnnounce
         end
         
         head :ok
-      end
-    end
-  end
-end
+
+      when 'issue_comment'
+        action_done = payload['action']
+        owner       = payload['issue']['user']['login']
+        repo_name   = payload['repository']['name']
+        link        = payload['comment']['html_url']
+        title       = payload['issue']['title']
+
+        # If comment is made on PR
+        if action_done == "created"
+          name = GitAnnounce.developers[owner.to_s.to_sym]
+          full_message = "@**#{name}**, someone left a comment on your PR (`#{title}`). Read it [here](#{link})"
+        end
+
+        Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
+        head :ok
+    
+
+
+      end # when
+    end # function
+  end # class
+end # module
