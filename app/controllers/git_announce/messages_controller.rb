@@ -19,7 +19,7 @@ module GitAnnounce
         link        = request_payload['pull_request']['_links']['html']['href']
         sender      = request_payload['sender']['login']
 
-        if ['A','E','I','O','U'].include?(label[0]) # If first letter of label is a vowel
+        if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
         else
           article = "a"
@@ -53,7 +53,8 @@ module GitAnnounce
 
         # If comment is made on PR
         if action_done == "created" && commenter != owner
-          name = GitAnnounce.developers[owner.to_s.to_sym]
+          owner     = GitAnnounce.developers[owner.to_s.to_sym]
+          commenter = GitAnnounce.developers[commenter.to_s.to_sym]
           full_message = "@**#{commenter}** left a comment on @**#{owner}**'s PR [#{title}](#{link})."
         end
 
@@ -66,7 +67,7 @@ module GitAnnounce
         title       = request_payload['pull_request']['title']     
 
         owner     = GitAnnounce.developers[owner.to_s.to_sym]
-        reviewer = GitAnnounce.developers[reviewer.to_s.to_sym]
+        reviewer  = GitAnnounce.developers[reviewer.to_s.to_sym]
         
         if action_done == "submitted"        
           case status
