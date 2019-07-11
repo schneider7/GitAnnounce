@@ -31,16 +31,9 @@ module GitAnnounce
         # unless GitAnnounce.ignore.include?(sender) # Ignore automatic changes by bots
         
         # If label is added
-        if action_done == 'labeled'
-
-          # Special Case
-          # if label.to_s == "!"
-          #   full_message = "@**all** -- The `'!'` label was just added. [#{title}](#{link}) needs attention immediately."
-
-          # Normal Case
-          
+        if action_done == 'labeled'         
           full_message = "@**#{GitAnnounce.developers[owner.to_s.to_sym]}**, #{article} `#{label}` label was added to your PR: [#{title}](#{link})."
-        end
+        
           
         # If label is removed  
         elsif action_done == 'unlabeled'
