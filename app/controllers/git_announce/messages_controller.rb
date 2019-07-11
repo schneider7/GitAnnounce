@@ -7,21 +7,21 @@ module GitAnnounce
       event_type = request.headers['X-GitHub-Event']
       payload = JSON.parse(request.body.read)
 
-      repo_name, full_message = 
-        case event_type       
+       
+      case event_type       
+      
+      when 'pull_request'
+        repo_name, full_message = process_pull_request(payload)
+        # Handle pullrequest webhooks
         
-        when 'pull_request'
-          process_pull_request(payload)
-          # Handle pullrequest webhooks
-          
-        when 'issue_comment'
-          process_issue_comment(payload)
-          # Handle Comments webhooks
-          
-        when 'pull_request_review'
-          process_pull_request_review(payload)
-          #Handle PR Review webhooks
-        end
+      when 'issue_comment'
+        repo_name, full_message = process_issue_comment(payload)
+        # Handle Comments webhooks
+        
+      when 'pull_request_review'
+        repo_name, full_message = process_pull_request_review(payload)
+        #Handle PR Review webhooks
+      end
 
       Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)      
       head :ok
