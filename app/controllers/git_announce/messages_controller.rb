@@ -8,7 +8,6 @@ module GitAnnounce
       request_payload = JSON.parse(request.body.read)
 
       case event_type
-
       when 'pull_request'
 
         action_done   = request_payload['action']
@@ -52,11 +51,11 @@ module GitAnnounce
         link        = request_payload['comment']['html_url']
         title       = request_payload['issue']['title']
 
-        # If comment is made on PR
+        # If comment is made on a PR
         if action_done == "created" && commenter != owner
-          owner     = GitAnnounce.developers[owner.to_s.to_sym]
-          commenter = GitAnnounce.developers[commenter.to_s.to_sym]
-          full_message = "@**#{commenter}** left a comment on @**#{owner}**'s PR [#{title}](#{link})."
+          owner_name     = GitAnnounce.developers[owner.to_s.to_sym]
+          commenter_name = GitAnnounce.developers[commenter.to_s.to_sym]
+          full_message = "@**#{commenter_name}** left a comment on @**#{owner_name}**'s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
@@ -70,7 +69,7 @@ module GitAnnounce
         owner_name      = GitAnnounce.developers[owner.to_s.to_sym]
         reviewer_name   = GitAnnounce.developers[reviewer.to_s.to_sym]
         
-        if action_done == "submitted"        
+        if action_done == 'submitted'        
           case status
           when 'approved'
             full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
@@ -79,7 +78,7 @@ module GitAnnounce
           end
         end #if
 
-      end # when
+      end # switch
 
       Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
       head :ok
