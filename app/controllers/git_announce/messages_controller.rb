@@ -36,7 +36,7 @@ module GitAnnounce
             full_message = "@**#{name}**,  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
 
           when 'closed'
-            if merged_status = "true"
+            if merged_status == "true"
               full_message = "@**#{name}**, your PR [#{title}](#{link}) was just merged."
             end
 
