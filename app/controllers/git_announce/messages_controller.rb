@@ -42,11 +42,11 @@ module GitAnnounce
         head :ok
 
       when 'issue_comment'
-        action_done = payload['action']
-        owner       = payload['issue']['user']['login']
-        repo_name   = payload['repository']['name']
-        link        = payload['comment']['html_url']
-        title       = payload['issue']['title']
+        action_done = request_payload['action']
+        owner       = request_payload['issue']['user']['login']
+        repo_name   = request_payload['repository']['name']
+        link        = request_payload['comment']['html_url']
+        title       = request_payload['issue']['title']
 
         # If comment is made on PR
         if action_done == "created"
