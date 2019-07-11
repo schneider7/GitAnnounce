@@ -27,7 +27,7 @@ module GitAnnounce
         
         unless GitAnnounce.ignore.include?(sender)
           name = GitAnnounce.developers[owner.to_s.to_sym]
-          
+
           if action_done == "labeled"    
             full_message = "@**#{name}**,  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."    
 
@@ -56,11 +56,11 @@ module GitAnnounce
         head :ok
 
       when 'pull_request_review'
-        action_done = payload['action']
-        status      = payload['review']['state']
-        owner       = payload['review']['user']['login']
-        link        = payload['review']['html_url']
-        title       = payload['pull_request']['title']     
+        action_done = request_payload['action']
+        status      = request_payload['review']['state']
+        owner       = request_payload['review']['user']['login']
+        link        = request_payload['review']['html_url']
+        title       = request_payload['pull_request']['title']     
 
         name = GitAnnounce.developers[owner.to_s.to_sym]
         
