@@ -1,10 +1,10 @@
 module GitAnnounce
   class MessagesController < ApplicationController
     
-    def process
+    def receive
 
       request.body.rewind
-      event_type = request.headers['X-GitHub-Event']
+      event_type = request.headers["X-GitHub-Event"]
       payload = JSON.parse(request.body.read)
 
        
@@ -19,7 +19,7 @@ module GitAnnounce
         title         = payload['pull_request']['title'] 
         link          = payload['pull_request']['_links']['html']['href']
         merged_status = payload['pull_request']['merged']
-        sender        = payload['sender']['login']
+        # sender        = payload['sender']['login']
 
         # Making sure message is grammatically correct
         # if ['A','E','I','O','U'].include?(label[0]) # If first letter of label is a vowel
@@ -29,34 +29,26 @@ module GitAnnounce
         # end 
           
         # unless GitAnnounce.ignore.include?(sender) # Ignore automatic changes by bots
-        # tab everything below once
-
+        
         # If label is added
         if action_done == 'labeled'
 
           # Special Case
-          if label.to_s == "!"
-            full_message = <<~MESSAGE
-              @**all** -- The `'!'` label was just added. 
-              [#{title}](#{link}) needs attention immediately.
-            MESSAGE
+          # if label.to_s == "!"
+          #   full_message = "@**all** -- The `'!'` label was just added. [#{title}](#{link}) needs attention immediately."
 
           # Normal Case
-          else
-            full_message = "@**#{GitAnnounce.developers[name.to_s.to_sym]}**, #{article} `#{label}` label was added to your PR: [#{title}](#{link})."
-          end
+          
+          full_message = "@**#{GitAnnounce.developers[owner.to_s.to_sym]}**, #{article} `#{label}` label was added to your PR: [#{title}](#{link})."
+        end
           
         # If label is removed  
         elsif action_done == 'unlabeled'
-            full_message = <<~MESSAGE
-              @**#{zulip_name(owner)}**, 
-              #{article} `#{label}` label was removed from your PR: 
-              [#{title}](#{link}).
-            MESSAGE
+            full_message = "@**#{GitAnnounce.developers[owner.to_s.to_sym]}**, #{article} `#{label}` label was removed from your PR: [#{title}](#{link})."
           
         # If PR is merged (into master)
         elsif action_done == "closed" && merged_status == "true"
-          full_message = "@**#{GitAnnounce.developers[name.to_s.to_sym]}**, your PR [#{title}](#{link}) was just merged."
+          full_message = "@**#{GitAnnounce.developers[owner.to_s.to_sym]}**, your PR [#{title}](#{link}) was just merged."
         end    
         # end
 
