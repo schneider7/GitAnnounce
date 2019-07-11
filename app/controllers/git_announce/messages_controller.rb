@@ -7,16 +7,18 @@ module GitAnnounce
       event_type = request.headers["X-GitHub-Event"]
       request_payload = JSON.parse(request.body.read)
 
-      action_done = request_payload['action']
-      owner       = request_payload['pull_request']['user']['login']
-      repo_name   = request_payload['pull_request']['head']['repo']['name']
-      label       = request_payload['label']['name']
-      title       = request_payload['pull_request']['title'] 
-      link        = request_payload['pull_request']['_links']['html']['href']
+     
 
       case event_type
 
       when 'pull_request'
+
+        action_done = request_payload['action']
+        owner       = request_payload['pull_request']['user']['login']
+        repo_name   = request_payload['pull_request']['head']['repo']['name']
+        label       = request_payload['label']['name']
+        title       = request_payload['pull_request']['title'] 
+        link        = request_payload['pull_request']['_links']['html']['href']
 
         if ['A','E','I','O','U'].include?(label[0]) # If first letter of label is a vowel
           article = "an"

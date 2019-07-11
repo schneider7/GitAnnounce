@@ -39,7 +39,7 @@ Now set up an outgoing webhook request from GitHub **on each of the repos you'd 
   
   - For the URL, point it at https://yourapp.domain/git_announce
   
-  - For trigger options, select only "pull requests" and "issues". 
+  - For trigger options, select "issues", "issue comments", "pull requests", "pull request reviews", and "pull request review comments". 
 
 ## Configuration
 
