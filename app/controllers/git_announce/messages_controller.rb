@@ -53,23 +53,26 @@ module GitAnnounce
 
               # Special Case
               if label == "!"
-                full_message = <<~MESSAGE"@**all** -- The `'!'` label was just added. 
-                [#{title}](#{link}) needs attention immediately."
+                full_message = <<~MESSAGE
+                  @**all** -- The `'!'` label was just added. 
+                  [#{title}](#{link}) needs attention immediately.
                 MESSAGE
 
               # Normal Case
               else
-                full_message = <<~MESSAGE"@**#{zulip_name(owner)}**, #{article} `#{label}` label was added to your PR:
-                  [#{title}](#{link})."
+                full_message = <<~MESSAGE
+                  zulip_name(owner)}**, #{article} `#{label}` label was added to your PR:
+                  [#{title}](#{link}).
                   MESSAGE
               end
               
             # If label is removed  
             elsif action_done == 'unlabeled'
-              full_message = <<~MESSAGE"@**#{zulip_name(owner)}**, 
-               #{article} `#{label}` label was removed from your PR: 
-               [#{title}](#{link})."
-               MESSAGE
+               full_message = <<~MESSAGE
+                  @**#{zulip_name(owner)}**, 
+                  #{article} `#{label}` label was removed from your PR: 
+                  [#{title}](#{link}).
+                MESSAGE
               
             # If PR is merged (into master)
             elsif action_done == "closed" && merged_status == "true"
@@ -88,8 +91,9 @@ module GitAnnounce
 
           # If comment is made on PR
           if action_done == "created"
-            full_message = <<~MESSAGE "@**#{zulip_name(owner)}**, someone left a comment on your PR (`#{title}`).
-            Read it [here](#{link})"
+            full_message = <<~MESSAGE
+              @**#{zulip_name(owner)}**, someone left a comment on your PR (`#{title}`).
+              Read it [here](#{link})
             MESSAGE
           end
 
@@ -102,18 +106,20 @@ module GitAnnounce
           owner       = payload['review']['user']['login']
           link        = payload['review']['html_url']
           title       = payload['pull_request']['title'] 
-          repo_name     = payload['pull_request']['head']['repo']['name']
+          repo_name   = payload['pull_request']['head']['repo']['name']
 
           if action_done == "submitted"        
             case status
             when 'approved'
-              full_message = <<~MESSAGE"@**#{zulip_name(owner)}**,a dev reviewer just approved changes on your PR 
-              (`#{title}`). Check it out [here](#{link})"
+              full_message = <<~MESSAGE
+                @**#{zulip_name(owner)}**, a dev reviewer just approved changes on your PR 
+                (`#{title}`). Check it out [here](#{link})
               MESSAGE
 
             when 'changes_requested'
-              full_message = <<~MESSAGE"@**#{zulip_name(owner)}**, changes were requested on your PR 
-              (`#{title}`). Read the comments [here](#{link})"
+              full_message = <<~MESSAGE
+                @**#{zulip_name(owner)}**, changes were requested on your PR 
+                (`#{title}`). Read the comments [here](#{link})
               MESSAGE
             end
           end
