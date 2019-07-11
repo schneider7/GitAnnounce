@@ -11,13 +11,14 @@ module GitAnnounce
 
       when 'pull_request'
 
-        action_done = request_payload['action']
-        owner       = request_payload['pull_request']['user']['login']
-        repo_name   = request_payload['pull_request']['head']['repo']['name']
-        label       = request_payload['label']['name']
-        title       = request_payload['pull_request']['title'] 
-        link        = request_payload['pull_request']['_links']['html']['href']
-        sender      = request_payload['sender']['login']
+        action_done   = request_payload['action']
+        owner         = request_payload['pull_request']['user']['login']
+        repo_name     = request_payload['pull_request']['head']['repo']['name']
+        label         = request_payload['label']['name']
+        title         = request_payload['pull_request']['title'] 
+        link          = request_payload['pull_request']['_links']['html']['href']
+        sender        = request_payload['sender']['login']
+        merged_status = request_payload['pull_request']['merged']
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
@@ -66,15 +67,15 @@ module GitAnnounce
         link        = request_payload['review']['html_url']
         title       = request_payload['pull_request']['title']     
 
-        owner     = GitAnnounce.developers[owner.to_s.to_sym]
-        reviewer  = GitAnnounce.developers[reviewer.to_s.to_sym]
+        owner_name      = GitAnnounce.developers[owner.to_s.to_sym]
+        reviewer_name   = GitAnnounce.developers[reviewer.to_s.to_sym]
         
         if action_done == "submitted"        
           case status
           when 'approved'
-            full_message = "@**#{owner}**, #{reviewer} just approved changes on your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
           when 'changes_requested'
-            full_message = "@**#{owner}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer}."
+            full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
           end
         end #if
 
