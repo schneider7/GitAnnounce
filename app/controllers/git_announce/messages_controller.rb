@@ -34,37 +34,46 @@ module GitAnnounce
 
           when 'unlabeled'
             full_message = "@**#{name}**,  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
+
+          when 'closed'
+            if merged_status = "true"
+              full_message = "@**#{name}**, your PR [#{title}](#{link}) was just merged."
+            end
+
           end # case
         end # unless
 
       when 'issue_comment'
         action_done = request_payload['action']
         owner       = request_payload['issue']['user']['login']
+        commenter   = request_payload['comment']['user']['login']
         repo_name   = request_payload['repository']['name']
         link        = request_payload['comment']['html_url']
         title       = request_payload['issue']['title']
 
         # If comment is made on PR
-        if action_done == "created"
+        if action_done == "created" && commenter != owner
           name = GitAnnounce.developers[owner.to_s.to_sym]
-          full_message = "@**#{name}**, someone left a comment on your PR [#{title}](#{link})."
+          full_message = "@**#{commenter}** left a comment on @**#{owner}**'s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
         action_done = request_payload['action']
         status      = request_payload['review']['state']
-        owner       = request_payload['review']['user']['login']
+        owner       = request_payload['pull_request']['user']['login']
+        reviewer    = request_payload['review']['user']['login']
         link        = request_payload['review']['html_url']
         title       = request_payload['pull_request']['title']     
 
-        name = GitAnnounce.developers[owner.to_s.to_sym]
+        owner     = GitAnnounce.developers[owner.to_s.to_sym]
+        reviewer = GitAnnounce.developers[reviewer.to_s.to_sym]
         
         if action_done == "submitted"        
           case status
           when 'approved'
-            full_message = "@**#{name}**, a dev reviewer just approved changes on your PR (`#{title}`). Check it out [here](#{link})"
+            full_message = "@**#{owner}**, #{reviewer} just approved changes on your PR [#{title}](#{link})."
           when 'changes_requested'
-            full_message = "@**#{name}**, changes were requested on your PR (`#{title}`). Read the comments [here](#{link})"
+            full_message = "@**#{owner}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer}."
           end
         end #if
 
@@ -72,7 +81,7 @@ module GitAnnounce
 
       Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
       head :ok
-      
+
     end # function
   end # class
 end # module
