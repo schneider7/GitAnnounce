@@ -13,7 +13,7 @@ module GitAnnounce
         http.request(request) 
       end 
       
-      payload = JSON.parse(request.body.read)
+      payload = JSON.parse(response.body.read)
 
       payload['user']['login']
     end
