@@ -22,8 +22,6 @@ module GitAnnounce
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
         merged        = request_payload['pull_request']['merged']
-        
-        puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#{merged}%%%%%%%%%%%%%%%%%"
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
@@ -31,29 +29,17 @@ module GitAnnounce
           article = "a"
         end
 
-        ### DOESN'T CURRENTLY WORK ###
-        case action_done
-        when 'closed'
+        unless GitAnnounce.ignore.include?(sender)
+          unless sender == owner
+            case action_done        
+            when 'labeled'              
+              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."            
           
-          if merged
-            full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
-          end
-        
-        when 'labeled'
-          unless GitAnnounce.ignore.include?(sender)
-            unless sender == owner           
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."
-            end
-          end
-
-        when 'unlabeled'
-          unless GitAnnounce.ignore.include?(sender)
-            unless sender == owner
+            when 'unlabeled'
               full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender} [#{title}](#{link})."
             end
-          end
-
-        end # switch
+          end # unless
+        end # unless
 
       when 'issue_comment'
         action_done = request_payload['action']
