@@ -52,34 +52,23 @@ module GitAnnounce
         title       = request_payload['issue']['title']
 
         # If comment is made on a PR
-        if action_done == "created" && commenter != owner
+        if action_done == 'created' && commenter != owner
           owner_name     = GitAnnounce.developers[owner.to_s.to_sym]
           commenter_name = GitAnnounce.developers[commenter.to_s.to_sym]
-          full_message = "#{commenter_name} just left a comment on @**#{owner_name}**s PR [#{title}](#{link})."
+          full_message   = "#{commenter_name} just left a comment on @**#{owner_name}**s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
-        action_done = request_payload['action']
+        action_done   = request_payload['action']
+        owner         = request_payload['pull_request']['user']['login']
+        reviewer      = request_payload['review']['user']['login']
+        title         = request_payload['pull_request']['title'] 
+        link          = request_payload['review']['html_url']  
+        repo_name     = request_payload['pull_request']['head']['repo']['name']
+        owner_name    = GitAnnounce.developers[owner.to_s.to_sym]
+        reviewer_name = GitAnnounce.developers[reviewer.to_s.to_sym]
         
-        if action_done == 'submitted'        
-          
-          owner       = request_payload['pull_request']['user']['login']
-          reviewer    = request_payload['review']['user']['login']
-          title       = request_payload['pull_request']['title'] 
-          link        = request_payload['review']['html_url']   
-      
-          owner_name    = GitAnnounce.developers[owner.to_s.to_sym]
-          reviewer_name = GitAnnounce.developers[reviewer.to_s.to_sym]
-
-          status      = request_payload['review']['state']
-        end #if
-
-        case status           
-        when 'approved'
-          full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
-        when 'changes_requested'
-          full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
-        end
+        full_message = "pull_request_review"
 
       end # switch
 
