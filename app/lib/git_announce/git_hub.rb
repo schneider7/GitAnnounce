@@ -8,10 +8,12 @@ module GitAnnounce
       uri = URI.parse("https://api.github.com/repos/#{username}/#{repo_name}/pulls/comments/#{id}")
    
       response = Net::HTTP.get_response(uri)
-      
-      payload = JSON.parse(response.body.read)
 
-      payload['user']['login']
+      Rails.logger.debug response
+      
+      # payload = JSON.parse(response.body.read)
+
+      # payload['user']['login']
     end
 
       
