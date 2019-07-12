@@ -17,7 +17,7 @@ module GitAnnounce
       end
 
       payload = JSON.parse(response.body)     
-      payload     
+      payload['user']['login']     
     end     
   end
 end
