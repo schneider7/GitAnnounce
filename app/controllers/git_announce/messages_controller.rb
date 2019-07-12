@@ -9,7 +9,9 @@ module GitAnnounce
 
       case event_type
       when 'pull_request'
-
+        # Get values from the parsed JSON that we'll need as arguments later.
+        # These reappear in every section because the format of 
+        # The webhook is slightly different for each event_type.
         action_done   = request_payload['action']
         owner         = request_payload['pull_request']['user']['login']
         repo_name     = request_payload['pull_request']['head']['repo']['name']
@@ -17,6 +19,7 @@ module GitAnnounce
         title         = request_payload['pull_request']['title'] 
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
+        sender_name   = GitAnnounce.developers[sender.to_sym]
         merged_status = request_payload['pull_request']['merged']
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
