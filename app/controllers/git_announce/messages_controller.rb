@@ -80,6 +80,22 @@ module GitAnnounce
           end
         end
 
+      when 'pull_request_review_comment'
+        action_done   = request_payload['action']
+        repo_owner    = request_payload['repository']['owner']['login']
+        repo_name     = request_payload['pull_request']['head']['repo']['name']
+        title         = request_payload['pull_request']['title']
+        link          = request_payload['comment']['html_url']
+        replier       = request_payload['pull_request']['user']['login']
+
+        # if the comment made, was a reply to something
+        if request_payload['comment'].key?("in_reply_to_id") 
+          id            = request_payload['comment']['in_reply_to_id']
+          get_commenter = GitHub.get_comment_owner(repo_owner, repo_name, id)
+          replied_to    = GitAnnounce.developers[get_commenter.to_sym]
+          full_message  = "@**#{replied_to}**, #{replier} responded to your comment on [#{title}](#{link})."
+        end
+
       end # switch
 
       Zulip.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
