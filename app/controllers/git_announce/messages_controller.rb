@@ -55,7 +55,7 @@ module GitAnnounce
         if action_done == "created" && commenter != owner
           owner_name     = GitAnnounce.developers[owner.to_s.to_sym]
           commenter_name = GitAnnounce.developers[commenter.to_s.to_sym]
-          full_message = "@**#{commenter_name}** left a comment on @**#{owner_name}**s PR [#{title}](#{link})."
+          full_message = "#{commenter_name} just left a comment on @**#{owner_name}**s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
