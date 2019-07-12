@@ -22,7 +22,8 @@ module GitAnnounce
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
         merged        = request_payload['pull_request']['merged']
-        Rails.logger.debug merged
+        
+        puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#{merged}%%%%%%%%%%%%%%%%%"
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
