@@ -21,7 +21,8 @@ module GitAnnounce
         sender        = request_payload['sender']['login']
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
-        merged = request_payload['pull_request']['merged']
+        merged        = request_payload['pull_request']['merged']
+        Rails.logger.debug merged
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
@@ -32,6 +33,7 @@ module GitAnnounce
         ### DOESN'T CURRENTLY WORK ###
         case action_done
         when 'closed'
+          
           if merged
             full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
           end
