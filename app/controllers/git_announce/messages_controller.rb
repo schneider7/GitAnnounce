@@ -55,7 +55,7 @@ module GitAnnounce
         if action_done == 'created' && commenter != owner
           owner_name     = GitAnnounce.developers[owner.to_s.to_sym]
           commenter_name = GitAnnounce.developers[commenter.to_s.to_sym]
-          full_message   = "#{commenter_name} just left a comment on @**#{owner_name}**s PR [#{title}](#{link})."
+          full_message   = "#{commenter_name} just left a comment on @**#{owner_name}**'s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
@@ -93,7 +93,8 @@ module GitAnnounce
           id            = request_payload['comment']['in_reply_to_id']
           get_commenter = GitHub.get_comment_owner(repo_owner, repo_name, id)
           replied_to    = GitAnnounce.developers[get_commenter.to_sym]
-          full_message  = "@**#{replied_to}**, #{replier} responded to your comment on [#{title}](#{link})."
+          who_replied   = GitAnnounce.developers[replier.to_sym]
+          full_message  = "@**#{replied_to}**, #{who_replied} responded to your comment on [#{title}](#{link})."
         end
 
       end # switch
