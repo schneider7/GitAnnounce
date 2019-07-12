@@ -68,7 +68,17 @@ module GitAnnounce
         owner_name    = GitAnnounce.developers[owner.to_s.to_sym]
         reviewer_name = GitAnnounce.developers[reviewer.to_s.to_sym]
         
-        full_message = "pull_request_review"
+
+        if action_done == "submitted"
+          status = request_payload['review']['state']
+
+          case status
+          when 'approved'
+            full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
+          when 'changes_requested'
+            full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
+          end
+        end
 
       end # switch
 
