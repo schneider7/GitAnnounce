@@ -29,13 +29,8 @@ module GitAnnounce
           name = GitAnnounce.developers[owner.to_s.to_sym]
 
           case action_done
-          when 'labeled'
-            
-            if label == "!"
-              full_message = "@all -- the `"!"` label was just added. [#{title}](#{link}) needs attention immediately."
-            else
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."
-            end    
+          when 'labeled'    
+            full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."    
 
           when 'unlabeled'
             full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
