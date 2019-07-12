@@ -20,8 +20,8 @@ module GitAnnounce
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
         sender_name   = GitAnnounce.developers[sender.to_sym]
-        name = GitAnnounce.developers[owner.to_s.to_sym]
-        merged_status = request_payload['pull_request']['merged']
+        name          = GitAnnounce.developers[owner.to_s.to_sym]
+        merged = request_payload['pull_request']['merged']
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
           article = "an"
@@ -32,7 +32,7 @@ module GitAnnounce
         ### DOESN'T CURRENTLY WORK ###
         case action_done
         when 'closed'
-          if merged_status == "true"
+          if merged
             full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
           end
         
