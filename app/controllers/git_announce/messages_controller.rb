@@ -29,15 +29,20 @@ module GitAnnounce
           name = GitAnnounce.developers[owner.to_s.to_sym]
 
           case action_done
-          when 'labeled'    
-            full_message = "@**#{name}**,  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."    
+          when 'labeled'
+            
+            if label == "!"
+              full_message = "@all -- the `"!"` label was just added. [#{title}](#{link}) needs attention immediately."
+            else
+              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."
+            end    
 
           when 'unlabeled'
-            full_message = "@**#{name}**,  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
+            full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
 
           when 'closed'
             if merged_status == "true"
-              full_message = "@**#{name}**, your PR [#{title}](#{link}) was just merged."
+              full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
             end
 
           end # case
@@ -74,9 +79,9 @@ module GitAnnounce
 
           case status
           when 'approved'
-            full_message = "@**#{owner_name}** , #{reviewer_name} just approved your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** -- #{reviewer_name} just approved your PR [#{title}](#{link})."
           when 'changes_requested'
-            full_message = "@**#{owner_name}** , #{reviewer_name} just requested changes on your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** -- #{reviewer_name} just requested changes on your PR [#{title}](#{link})."
           end
         end
 
@@ -94,7 +99,7 @@ module GitAnnounce
           get_commenter = GitHub.get_comment_owner(repo_owner, repo_name, id)
           replied_to    = GitAnnounce.developers[get_commenter.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
-          full_message  = "@**#{replied_to}**, #{who_replied} responded to your comment on [#{title}](#{link})."
+          full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
         end
 
       end # switch
