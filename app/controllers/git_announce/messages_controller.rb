@@ -33,10 +33,10 @@ module GitAnnounce
           unless sender == owner
             case action_done        
             when 'labeled'              
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."            
+              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender_name} [#{title}](#{link})."            
           
             when 'unlabeled'
-              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender} [#{title}](#{link})."
+              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender_name} [#{title}](#{link})."
             end
           end # unless
         end # unless
@@ -84,13 +84,13 @@ module GitAnnounce
         repo_name     = request_payload['pull_request']['head']['repo']['name']
         title         = request_payload['pull_request']['title']
         link          = request_payload['comment']['html_url']
-        replier       = request_payload['pull_request']['user']['login']
+        replier       = request_payload['comment']['user']['login']
 
         # if the comment made, was a reply to something
         if request_payload['comment'].key?("in_reply_to_id") 
           id            = request_payload['comment']['in_reply_to_id']
-          get_commenter = GitHub.get_comment_owner(repo_owner, repo_name, id)
-          replied_to    = GitAnnounce.developers[get_commenter.to_sym]
+          comment_owner = GitHub.get_comment_owner(repo_owner, repo_name, id)
+          replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
         end
