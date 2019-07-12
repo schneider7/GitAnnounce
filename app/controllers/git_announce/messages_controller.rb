@@ -28,19 +28,25 @@ module GitAnnounce
         unless GitAnnounce.ignore.include?(sender)
           name = GitAnnounce.developers[owner.to_s.to_sym]
 
-          case action_done
-          when 'labeled'    
-            full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR:  [#{title}](#{link})."    
+          unless sender == owner
 
-          when 'unlabeled'
-            full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR:  [#{title}](#{link})."
+            case action_done
+            when 'labeled'    
+              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."    
 
-          when 'closed'
+            when 'unlabeled'
+              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender} [#{title}](#{link})."
+            end
+
+          end #unless
+
+          ### DOESN'T CURRENTLY WORK ###
+          if action_done == 'closed'
             if merged_status == "true"
               full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
             end
-
-          end # case
+          end
+      
         end # unless
 
       when 'issue_comment'
