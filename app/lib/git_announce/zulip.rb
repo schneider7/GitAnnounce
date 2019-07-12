@@ -1,7 +1,7 @@
 require 'net/http'
 
 module GitAnnounce
-  module Http
+  module Zulip
 
     def self.zulip_message(domain, stream_name, repo_name, content)
       uri = URI.parse("https://zulip.#{domain}.com/api/v1/messages")
@@ -17,6 +17,5 @@ module GitAnnounce
       
       JSON.parse response.body
     end 
-
   end
 end

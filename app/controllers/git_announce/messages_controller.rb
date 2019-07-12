@@ -74,15 +74,15 @@ module GitAnnounce
 
           case status
           when 'approved'
-            full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** , #{reviewer_name} just approved your PR [#{title}](#{link})."
           when 'changes_requested'
-            full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
+            full_message = "@**#{owner_name}** , #{reviewer_name} just requested changes on your PR [#{title}](#{link})."
           end
         end
 
       end # switch
 
-      Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
+      Zulip.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
       head :ok
 
     end # method
