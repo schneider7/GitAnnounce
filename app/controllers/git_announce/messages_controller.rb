@@ -20,6 +20,7 @@ module GitAnnounce
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
         sender_name   = GitAnnounce.developers[sender.to_sym]
+        name = GitAnnounce.developers[owner.to_s.to_sym]
         merged_status = request_payload['pull_request']['merged']
 
         if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
@@ -27,30 +28,29 @@ module GitAnnounce
         else
           article = "a"
         end
+
+        ### DOESN'T CURRENTLY WORK ###
+        case action_done
+        when 'closed'
+          if merged_status == "true"
+            full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
+          end
         
-        unless GitAnnounce.ignore.include?(sender)
-          name = GitAnnounce.developers[owner.to_s.to_sym]
-
-          unless sender == owner
-
-            case action_done
-            when 'labeled'    
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."    
-
-            when 'unlabeled'
-              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender} [#{title}](#{link})."
-            end
-
-          end #unless
-
-          ### DOESN'T CURRENTLY WORK ###
-          if action_done == 'closed'
-            if merged_status == "true"
-              full_message = "@**#{name}** -- your PR [#{title}](#{link}) was just merged."
+        when 'labeled'
+          unless GitAnnounce.ignore.include?(sender)
+            unless sender == owner           
+              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender} [#{title}](#{link})."
             end
           end
-      
-        end # unless
+
+        when 'unlabeled'
+          unless GitAnnounce.ignore.include?(sender)
+            unless sender == owner
+              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender} [#{title}](#{link})."
+            end
+          end
+
+        end # switch
 
       when 'issue_comment'
         action_done = request_payload['action']
