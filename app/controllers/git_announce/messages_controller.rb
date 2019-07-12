@@ -60,29 +60,32 @@ module GitAnnounce
 
       when 'pull_request_review'
         action_done = request_payload['action']
-        owner       = request_payload['pull_request']['user']['login']
-        reviewer    = request_payload['review']['user']['login']
-        title       = request_payload['pull_request']['title'] 
-        link        = request_payload['review']['html_url']   
         
         if action_done == 'submitted'        
-          status    = request_payload['review']['state']
-
+          
+          owner       = request_payload['pull_request']['user']['login']
+          reviewer    = request_payload['review']['user']['login']
+          title       = request_payload['pull_request']['title'] 
+          link        = request_payload['review']['html_url']   
+      
           owner_name    = GitAnnounce.developers[owner.to_s.to_sym]
           reviewer_name = GitAnnounce.developers[reviewer.to_s.to_sym]
 
-          if status == 'approved'          
-            full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
-          elsif status == 'changes_requested'
-            full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
-          end
+          status      = request_payload['review']['state']
         end #if
+
+        case status           
+        when 'approved'
+          full_message = "@**#{owner_name}**, #{reviewer_name} just approved changes on your PR [#{title}](#{link})."
+        when 'changes_requested'
+          full_message = "@**#{owner_name}**, changes were requested on your PR [#{title}](#{link}) by #{reviewer_name}."
+        end
 
       end # switch
 
       Http.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
       head :ok
 
-    end # function
+    end # method
   end # class
 end # module
