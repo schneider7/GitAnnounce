@@ -9,9 +9,9 @@ module GitAnnounce
    
       response = Net::HTTP.get_response(uri)
       
-      payload = JSON.parse(response)
+      # payload = JSON.parse(response)
 
-      Rails.logger.debug payload.inspect
+      Rails.logger.debug response.inspect
       # payload['user']['login']
     end
 
