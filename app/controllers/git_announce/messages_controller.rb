@@ -75,6 +75,8 @@ module GitAnnounce
             full_message = "@**#{owner_name}** -- #{reviewer_name} just approved your PR [#{title}](#{link})."
           when 'changes_requested'
             full_message = "@**#{owner_name}** -- #{reviewer_name} just requested changes on your PR [#{title}](#{link})."
+          when 'commented'
+            full_message = "@**#{owner_name}** -- #{reviewer_name} just left a review on your PR [#{title}](#{link})."
           end
         end
 
