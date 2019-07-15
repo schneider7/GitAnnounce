@@ -8,9 +8,9 @@ If you're interested in the code (e.g. to adapt this engine for your own needs),
 
 This engine will send out Zulip messages of the following form:
 
-@User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
-@User Name, your PR [Lets pull these changes into master](https://github.com) was approved by Michael Schneider
-@User Name, Michael Schneider requested changes on your PR [Lets pull these changes into master](https://github.com). See the comments here.
+- @User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
+- @User Name, your PR [Lets pull these changes into master](https://github.com) was approved by Michael Schneider
+- @User Name, Michael Schneider requested changes on your PR [Lets pull these changes into master](https://github.com). See the comments here.
 
 That is, it gets the user who opened the PR and tags them in a Zulip message about a change that occurred on their PR.
 
