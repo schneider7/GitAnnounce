@@ -11,7 +11,7 @@ module GitAnnounce
       when 'pull_request'
         # Get values from the parsed JSON that we'll need as arguments later.
         # These reappear in every section because the format of 
-        # The webhook is slightly different for each event_type.
+        # The webhook received is slightly different for each event_type.
         action_done   = request_payload['action']
         owner         = request_payload['pull_request']['user']['login']
         repo_name     = request_payload['pull_request']['head']['repo']['name']

@@ -1,7 +1,7 @@
 # GitAnnounce
 GitAnnounce will send messages in a [Zulip](https://zulipchat.com/) stream when someone makes changes on a GitHub PR. 
 
-If you're interested in the code (e.g. to adapt this engine for your own needs), it's located primarily in `app/controllers/messages_controller.rb` and `app/lib/http.rb`.
+If you're interested in the code (e.g. to adapt this engine for your own needs), it lives primarily in `app/controllers/messages_controller.rb` , `app/lib/git_hub.rb`, and `app/lib/zulip.rb`.
 
 
 ## Usage
@@ -9,6 +9,15 @@ If you're interested in the code (e.g. to adapt this engine for your own needs),
 This engine will send out Zulip messages of the following form:
 
 @User Name, a `funky` label was added to your PR:  [Lets pull these changes into master](https://github.com)
+@User Name, your PR [Lets pull these changes into master](https://github.com) was approved by Michael Schneider
+@User Name, Michael Schneider requested changes on your PR [Lets pull these changes into master](https://github.com). See the comments here.
+
+That is, it gets the user who opened the PR and tags them in a Zulip message about a change that occurred on their PR.
+
+Key things to note: 
+
+- It doesn't notify anyone when a user adds a label to their own PR.
+- It doesn't notify anyone when a change is made by an "ignored" user (e.g. a bot, see below)
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -51,8 +60,9 @@ Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigat
  - `ENV["STREAM_NAME"]` is the name of the stream you'd like to post the updates to. Create this stream *before* you use the engine. e.g. "GitHub Notifications" (with the quotes, if your stream name has spaces in it)
  - `ENV["BOT_EMAIL"]` is the "email" of the bot you just made, that will post the updates.
  - `ENV["BOT_API_KEY"]` is the Zulip API key for the bot you just made.
+ - `ENV["GITHUB_TOKEN"]` is the GitHub API access key you want to use. This is necessary if your organization's repos are private, as the `GET` requests done by GitAnnounce will fail unless you provide this authentication.
 
- You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create a config hash and array as shown below, and populate it with your development team's information:
+ You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create both a config hash and array as shown below, and populate it with your development team's information:
 
  ```ruby
 GitAnnounce.developers = {
@@ -69,7 +79,7 @@ GitAnnounce.ignore = ["bot_account1", "bot_account2"]
 
  This is so that the GitHub usernames will get matched to the real names of the developers, which will make the Zulip messages more human-readable. **Make sure that the full names defined by this hash are the same as the full names used in Zulip.** For example, if I had written "Mike Schneider" as my name in the hash, the engine wouldn't properly tag me in Zulip messages, because my name there is set up as "Michael Schneider".
 
-Configure these four environment variables and the hash to match your organization and bot's info, and the engine will do the rest.
+Configure these five environment variables and the hash to match your organization and bot's info, and the engine will do the rest.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
