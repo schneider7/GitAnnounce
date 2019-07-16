@@ -30,21 +30,14 @@ module GitAnnounce
             full_message = "@**#{reviewer_name}** -- #{sender_name} requested a dev review from you on [#{title}](#{link})"
           end
 
-          if action_done == ('labeled' || 'unlabeled')            
-            label         = request_payload['label']['name']
-            if ['A','E','I','O','U'].include?(label[0].upcase)
-              article = "an"
-            else
-              article = "a"
-            end
-          end
-
           unless sender == owner
             if action_done == 'labeled'
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender_name} [#{title}](#{link})."
+              label = request_payload['label']['name']
+              full_message = "@**#{name}** -- the `#{label}` label was added to your PR by #{sender_name} [#{title}](#{link})."
 
             elsif action_done == 'unlabeled'
-              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender_name} [#{title}](#{link})."
+              label = request_payload['label']['name']
+              full_message = "@**#{name}** -- the `#{label}` label was removed from your PR by #{sender_name} [#{title}](#{link})."
             end # if 
           end # unless
         end # unless
