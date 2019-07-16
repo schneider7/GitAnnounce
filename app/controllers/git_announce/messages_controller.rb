@@ -35,10 +35,10 @@ module GitAnnounce
           case action_done 
           when 'review_requested'
             requested_reviewer = request_payload['requested_reviewer']['login']
-            requested_reviewer = GitAnnounce.developers[requested_reviewer.to_sym]
+            reviewer_name = GitAnnounce.developers[requested_reviewer.to_sym]
             full_message = "@**#{requested_reviewer}** -- #{sender_name} 
             requested a dev review from you on [#{title}](#{link})"
-            
+
           when 'labeled' 
             unless sender == owner             
               full_message = "@**#{name}** --  #{article} `#{label}` label was 
