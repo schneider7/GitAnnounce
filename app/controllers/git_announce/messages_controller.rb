@@ -19,26 +19,41 @@ module GitAnnounce
         title         = request_payload['pull_request']['title'] 
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
+        merged        = request_payload['pull_request']['merged']
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
-        merged        = request_payload['pull_request']['merged']
 
-        if ['A','E','I','O','U'].include?(label[0].upcase) # If first letter of label is a vowel
+        # If first letter of label is a vowel
+        if ['A','E','I','O','U'].include?(label[0].upcase)
           article = "an"
         else
           article = "a"
         end
 
         unless GitAnnounce.ignore.include?(sender)
-          unless sender == owner
-            case action_done        
-            when 'labeled'              
-              full_message = "@**#{name}** --  #{article} `#{label}` label was added to your PR by #{sender_name} [#{title}](#{link})."            
           
-            when 'unlabeled'
-              full_message = "@**#{name}** --  #{article} `#{label}` label was removed from your PR by #{sender_name} [#{title}](#{link})."
+          case action_done 
+          when 'review_requested'
+            requested_reviewer = request_payload['requested_reviewer']['login']
+            requested_reviewer = GitAnnounce.developers[requested_reviewer.to_sym]
+            full_message = "@**#{requested_reviewer}** -- #{sender_name} 
+            requested a dev review from you on [#{title}](#{link})"
+            
+          when 'labeled' 
+            unless sender == owner             
+              full_message = "@**#{name}** --  #{article} `#{label}` label was 
+                            added to your PR by #{sender_name} 
+                            [#{title}](#{link})."
             end
-          end # unless
+          
+          when 'unlabeled'
+            unless sender == owner 
+              full_message = "@**#{name}** --  #{article} `#{label}` label
+                             was removed from your PR by #{sender_name} 
+                             [#{title}](#{link})."
+            end
+
+          end # switch
         end # unless
 
       when 'issue_comment'
@@ -53,7 +68,8 @@ module GitAnnounce
         if action_done == 'created' && commenter != owner
           owner_name     = GitAnnounce.developers[owner.to_s.to_sym]
           commenter_name = GitAnnounce.developers[commenter.to_s.to_sym]
-          full_message   = "#{commenter_name} just left a comment on @**#{owner_name}**'s PR [#{title}](#{link})."
+          full_message   = "#{commenter_name} just left a comment on 
+                           @**#{owner_name}**'s PR [#{title}](#{link})."
         end
 
       when 'pull_request_review'
@@ -72,11 +88,14 @@ module GitAnnounce
 
           case status
           when 'approved'
-            full_message = "@**#{owner_name}** -- #{reviewer_name} just approved your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** -- #{reviewer_name}
+                           just approved your PR [#{title}](#{link})."
           when 'changes_requested'
-            full_message = "@**#{owner_name}** -- #{reviewer_name} just requested changes on your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** -- #{reviewer_name} 
+                           just requested changes on your PR [#{title}](#{link})."
           when 'commented'
-            full_message = "@**#{owner_name}** -- #{reviewer_name} just left a review on your PR [#{title}](#{link})."
+            full_message = "@**#{owner_name}** -- #{reviewer_name} just 
+                           left a review on your PR [#{title}](#{link})."
           end
         end
 
@@ -94,7 +113,8 @@ module GitAnnounce
           comment_owner = GitHub.get_comment_owner(repo_owner, repo_name, id)
           replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
-          full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
+          full_message  = "@**#{replied_to}** -- #{who_replied} responded 
+                          to your comment on [#{title}](#{link})."
         end
 
       end # switch
