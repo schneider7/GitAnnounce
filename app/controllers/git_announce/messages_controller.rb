@@ -22,6 +22,7 @@ module GitAnnounce
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
 
+
         # If first letter of label is a vowel
         if ['A','E','I','O','U'].include?(label[0].upcase)
           article = "an"
@@ -31,30 +32,34 @@ module GitAnnounce
 
         unless GitAnnounce.ignore.include?(sender)
           
-          case action_done 
-          when 'review_requested'
+          if action_done == 'review_requested'
             requested_reviewer = request_payload['requested_reviewer']['login']
             reviewer_name = GitAnnounce.developers[requested_reviewer.to_sym]
             full_message = "@**#{requested_reviewer}** -- #{sender_name} 
             requested a dev review from you on [#{title}](#{link})"
+          end
 
-          when 'labeled' 
-            unless sender == owner
-              label         = request_payload['label']['name']             
-              full_message = "@**#{name}** --  #{article} `#{label}` label was 
-                            added to your PR by #{sender_name} 
-                            [#{title}](#{link})."
-            end
-          
-          when 'unlabeled'
+          if action_done == ('labeled' || 'unlabeled')            
             label         = request_payload['label']['name']
-            unless sender == owner 
+            if ['A','E','I','O','U'].include?(label[0].upcase)
+              article = "an"
+            else
+              article = "a"
+            end
+          end
+
+          unless sender == owner
+            if action_done == 'labeled'
+              full_message = "@**#{name}** --  #{article} `#{label}` label was 
+                             added to your PR by #{sender_name} 
+                             [#{title}](#{link})."
+
+            elsif action_done == 'unlabeled'
               full_message = "@**#{name}** --  #{article} `#{label}` label
                              was removed from your PR by #{sender_name} 
                              [#{title}](#{link})."
-            end
-
-          end # switch
+            end # if 
+          end # unless
         end # unless
 
       when 'issue_comment'
