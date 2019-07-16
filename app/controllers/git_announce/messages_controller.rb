@@ -15,7 +15,6 @@ module GitAnnounce
         action_done   = request_payload['action']
         owner         = request_payload['pull_request']['user']['login']
         repo_name     = request_payload['pull_request']['head']['repo']['name']
-        label         = request_payload['label']['name']
         title         = request_payload['pull_request']['title'] 
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
@@ -40,13 +39,15 @@ module GitAnnounce
             requested a dev review from you on [#{title}](#{link})"
 
           when 'labeled' 
-            unless sender == owner             
+            unless sender == owner
+              label         = request_payload['label']['name']             
               full_message = "@**#{name}** --  #{article} `#{label}` label was 
                             added to your PR by #{sender_name} 
                             [#{title}](#{link})."
             end
           
           when 'unlabeled'
+            label         = request_payload['label']['name']
             unless sender == owner 
               full_message = "@**#{name}** --  #{article} `#{label}` label
                              was removed from your PR by #{sender_name} 
