@@ -10,7 +10,7 @@ module GitAnnounce
       case event_type
       when 'pull_request'
         # Get values from the parsed JSON that we'll need as arguments later.
-        # These reappear in every section because the format of 
+        # These reappear so often because the format of 
         # The webhook received is slightly different for each event_type.
         action_done   = request_payload['action']
         owner         = request_payload['pull_request']['user']['login']
@@ -21,14 +21,6 @@ module GitAnnounce
         merged        = request_payload['pull_request']['merged']
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
-
-
-        # If first letter of label is a vowel
-        if ['A','E','I','O','U'].include?(label[0].upcase)
-          article = "an"
-        else
-          article = "a"
-        end
 
         unless GitAnnounce.ignore.include?(sender)
           
