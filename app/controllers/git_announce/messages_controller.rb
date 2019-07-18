@@ -89,7 +89,7 @@ module GitAnnounce
           private_msg   = "#{who_replied} commented on [#{title}](#{link}) and said: #{body}.
                           Tag the other bot and reply with your response."
 
-          recipients    = [GitAnnounce.emails[replied_to], ENV["BOT_EMAIL_2"].to_s]
+          recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
 
           Rails.logger.debug private_msg.inspect
 
