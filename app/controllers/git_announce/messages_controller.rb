@@ -18,28 +18,15 @@ module GitAnnounce
         title         = request_payload['pull_request']['title'] 
         link          = request_payload['pull_request']['_links']['html']['href']
         sender        = request_payload['sender']['login']
-        merged        = request_payload['pull_request']['merged']
         sender_name   = GitAnnounce.developers[sender.to_sym]
         name          = GitAnnounce.developers[owner.to_s.to_sym]
 
-        unless GitAnnounce.ignore.include?(sender)
-          
+        unless GitAnnounce.ignore.include?(sender)          
           if action_done == 'review_requested'
             requested_reviewer = request_payload['requested_reviewer']['login']
             reviewer_name = GitAnnounce.developers[requested_reviewer.to_sym]
             full_message = "@**#{reviewer_name}** -- #{sender_name} requested a dev review from you on [#{title}](#{link})"
           end
-
-          unless sender == owner
-            if action_done == 'labeled'
-              label = request_payload['label']['name']
-              full_message = "@**#{name}** -- the `#{label}` label was added to your PR by #{sender_name} [#{title}](#{link})."
-
-            elsif action_done == 'unlabeled'
-              label = request_payload['label']['name']
-              full_message = "@**#{name}** -- the `#{label}` label was removed from your PR by #{sender_name} [#{title}](#{link})."
-            end # if 
-          end # unless
         end # unless
 
       when 'issue_comment'
