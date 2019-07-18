@@ -23,6 +23,7 @@ module GitAnnounce
       request = Net::HTTP::Post.new(uri) 
       request.basic_auth(ENV["BOT_EMAIL"], ENV["BOT_API_KEY"]) 
 
+      Rails.logger.debug recipients.inspect
       
       request.body = "type=private&to=#{recipients[0]}, #{recipients[1]}&content=#{content}"
       

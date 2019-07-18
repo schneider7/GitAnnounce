@@ -83,13 +83,15 @@ module GitAnnounce
           comment_owner = GitHub.get_comment_owner(repo_owner, repo_name, id)
           replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
+
+
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
           private_msg   = "#{who_replied} commented on [#{title}](#{link}) and said: #{body}.
                           Tag the other bot and reply with your response."
 
-          recipient1    = GitAnnounce.emails[replied_to]
-          recipient2    = ENV["BOT_EMAIL_2"].to_s
-          recipients    = [recipient1, recipient2]
+          recipients    = [GitAnnounce.emails[replied_to], ENV["BOT_EMAIL_2"].to_s]
+
+          Rails.logger.debug private_msg.inspect
 
           Zulip.zulip_group_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
           head :ok
