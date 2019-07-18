@@ -83,6 +83,12 @@ module GitAnnounce
           replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
+
+          recipients    = w%(GitAnnounce.emails[replied_to] ENV["BOT_EMAIL_2"])
+
+          Zulip.zulip_group_message(ENV['ZULIP_DOMAIN'], recipients, full_message)
+          head :ok
+
         end
 
       end # switch
@@ -91,5 +97,10 @@ module GitAnnounce
       head :ok
 
     end # method
+
+    def zulip
+     #  hello world!
+    end #method
+
   end # class
 end # module
