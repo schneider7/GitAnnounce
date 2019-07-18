@@ -91,7 +91,7 @@ module GitAnnounce
           recipient2    = ENV["BOT_EMAIL_2"].to_s
           recipients    = [recipient1, recipient2]
 
-          Zulip.zulip_group_message(ENV['ZULIP_DOMAIN'], recipients, private_msg)
+          Zulip.zulip_group_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
           head :ok
 
         end
