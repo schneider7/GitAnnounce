@@ -75,6 +75,7 @@ module GitAnnounce
         title         = request_payload['pull_request']['title']
         link          = request_payload['comment']['html_url']
         replier       = request_payload['comment']['user']['login']
+        body          = request_payload['comment']['body']
 
         # if the comment made, was a reply to something
         if request_payload['comment'].key?("in_reply_to_id") 
@@ -83,10 +84,14 @@ module GitAnnounce
           replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
+          private_msg   = "#{who_replied} commented on [#{title}](#{link}) and said: #{body}.
+                          Tag the other bot and reply with your response."
 
-          recipients    = w%(GitAnnounce.emails[replied_to] ENV["BOT_EMAIL_2"])
+          recipient1    = GitAnnounce.emails[replied_to]
+          recipient2    = ENV["BOT_EMAIL_2"].to_s
+          recipients    = [recipient1, recipient2]
 
-          Zulip.zulip_group_message(ENV['ZULIP_DOMAIN'], recipients, full_message)
+          Zulip.zulip_group_message(ENV['ZULIP_DOMAIN'], recipients, private_msg)
           head :ok
 
         end
