@@ -86,12 +86,16 @@ module GitAnnounce
 
 
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
-          private_msg   = "#{who_replied} commented on [#{title}](#{link}) and said: #{body}.
-                          Tag the other bot and reply with your response."
+          private_msg   = <<~HEREDOC
+                            #{who_replied} commented on [#{title}](#{link}) and said: 
+                            ```quote
+                            #{body}
+                            ```
+                            Tag the interface bot and reply with your response."
+                            HEREDOC
 
           recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
 
-          Rails.logger.debug private_msg.inspect
 
           Zulip.zulip_group_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
           head :ok
@@ -106,7 +110,14 @@ module GitAnnounce
     end # method
 
     def zulip
-     #  hello world!
+      zulip_payload = JSON.parse(request.body.read)
+
+      body = zulip_payload['message']['content']
+      recipients ["mschneider3254@gmail.com"]
+
+      Zulip.zulip_group_message(sycamoreeducation, recipients, body)
+      head :ok
+
     end #method
 
   end # class
