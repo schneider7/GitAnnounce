@@ -23,7 +23,7 @@ module GitAnnounce
       request = Net::HTTP::Post.new(uri) 
       request.basic_auth(ENV["BOT_EMAIL"], ENV["BOT_API_KEY"]) 
 
-      to = "#{recipients.values.join(", ")}"
+      to = "#{recipients.join(", ")}"
       
       request.body = "type=private&to=#{to}&content=#{content}"
       
