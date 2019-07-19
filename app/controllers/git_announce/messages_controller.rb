@@ -122,6 +122,8 @@ module GitAnnounce
         GitHub.post_comment(id, repo, number, content)
       end 
 
+      render :json => {:response_not_required => true}
+
     end #method
 
   end # class
