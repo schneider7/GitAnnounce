@@ -118,7 +118,7 @@ module GitAnnounce
       recipients = ["mschneider3254@gmail.com"]
 
       Zulip.zulip_private_message("sycamoreeducation", recipients, body)
-      render response_not_required: true 
+      render :json => {:response_not_required => true} 
 
     end #method
 
