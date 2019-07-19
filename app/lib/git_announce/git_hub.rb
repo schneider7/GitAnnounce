@@ -24,7 +24,7 @@ module GitAnnounce
 
     ###########################################################################
     ##   Method below doesn't work. I'm leaving it here because if it worked ##
-    ##   as intended, it'd be really helpful tool. On my to-fix list.        ##
+    ##   as intended, it'd be a really helpful tool. On my to-fix list.      ##
     ###########################################################################
 
     # def self.post_comment(id, repo, number, content)

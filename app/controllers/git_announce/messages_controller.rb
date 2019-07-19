@@ -3,6 +3,7 @@ module GitAnnounce
     
     def receive
 
+      # Receive and parse webhook content
       request.body.rewind
       event_type = request.headers["X-GitHub-Event"]
       request_payload = JSON.parse(request.body.read)
@@ -12,15 +13,16 @@ module GitAnnounce
         # Get values from the parsed JSON that we'll need as arguments later.
         # These reappear so often because the format of 
         # The webhook received is slightly different for each event_type.
-        action_done   = request_payload['action']
-        owner         = request_payload['pull_request']['user']['login']
-        repo_name     = request_payload['pull_request']['head']['repo']['name']
-        title         = request_payload['pull_request']['title'] 
-        link          = request_payload['pull_request']['_links']['html']['href']
-        sender        = request_payload['sender']['login']
-        sender_name   = GitAnnounce.developers[sender.to_sym]
-        name          = GitAnnounce.developers[owner.to_s.to_sym]
+        action_done  = request_payload['action']
+        owner        = request_payload['pull_request']['user']['login']
+        repo_name    = request_payload['pull_request']['head']['repo']['name']
+        title        = request_payload['pull_request']['title'] 
+        link         = request_payload['pull_request']['_links']['html']['href']
+        sender       = request_payload['sender']['login']
+        sender_name  = GitAnnounce.developers[sender.to_sym]
+        name         = GitAnnounce.developers[owner.to_s.to_sym]
 
+        # Ignore bot accts
         unless GitAnnounce.ignore.include?(sender)          
           if action_done == 'review_requested'
             requested_reviewer = request_payload['requested_reviewer']['login']
@@ -54,7 +56,7 @@ module GitAnnounce
         owner_name    = GitAnnounce.developers[owner.to_s.to_sym]
         reviewer_name = GitAnnounce.developers[reviewer.to_s.to_sym]
         
-
+        # When review request is submitted in any of the 3 possible states
         if action_done == "submitted"
           status = request_payload['review']['state']
 
@@ -86,24 +88,35 @@ module GitAnnounce
           who_replied   = GitAnnounce.developers[replier.to_sym]
 
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
-          private_msg   = <<~HEREDOC
-                            #{who_replied} commented on [#{title}](#{link}) and said: 
-                            ```quote
-                            #{body}
-                            ```
-                            In a message, tag the interface bot and copy-paste the following into your message:
+          
+          # The code below sends a private message to the owner of a PR. I 
+          # took it back out because it was originally going to allow the owner 
+          # to use it to respond to comments on their PR, using Zulip as an 
+          # interface for GitHub. Keeping the authentication tokens straight 
+          # turned out to be harder than I thought, and I started it toward the
+          # end of my internship, so it didn't quite get finished. It's 90% of 
+          # the way there, something's just not quite working properly on the 
+          # zulip method further down. 
+          
+          # The PM works fine, it's the action of getting a zulip message to 
+          # interface with GitHub that doesn't. In short, the real problem
+          # child is the post_comment method in lib/git_hub.rb
+          
+          # private_msg   = <<~HEREDOC
+          #                   #{who_replied} commented on [#{title}](#{link}) and said: 
+          #                   ```quote
+          #                   #{body}
+          #                  ```
+          #                   In a message, tag the interface bot and copy-paste the following into your message:
 
-                            ```
-                            #{id} / #{repo_name} / #{number} / 
-                            ```
-                            HEREDOC
+          #                   ```
+          #                   #{id} / #{repo_name} / #{number} / 
+          #                   ```
+          #                   HEREDOC
 
           # recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
-
-
           # Zulip.zulip_private_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
           # head :ok
-
         end
 
       end # switch
@@ -111,7 +124,7 @@ module GitAnnounce
       Zulip.zulip_message(ENV['ZULIP_DOMAIN'], ENV['STREAM_NAME'], repo_name, full_message)
       head :ok
 
-    end # method
+    end
 
     # def zulip
     #   zulip_payload = JSON.parse(request.body.read)
@@ -128,7 +141,7 @@ module GitAnnounce
 
     #   render :json => {:response_not_required => true}
 
-    # end #method
+    # end
 
   end # class
 end # module
