@@ -74,8 +74,6 @@ GitAnnounce.developers = {
 # Ignoring changes made automatically by bots. Usually changes made by 
 # bots aren't worth notifying someone about, because they were small to begin with.
 GitAnnounce.ignore = ["bot_account1", "bot_account2"]
-
-
 ```
 
  This is so that the GitHub usernames will get matched to the real names of the developers, which will make the Zulip messages more human-readable. **Make sure that the full names defined by this hash are the same as the full names used in Zulip.** For example, if I had written "Mike Schneider" as my name in the hash, the engine wouldn't properly tag me in Zulip messages, because my name there is set up as "Michael Schneider".
