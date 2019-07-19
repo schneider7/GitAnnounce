@@ -114,8 +114,8 @@ module GitAnnounce
 
       body = zulip_payload['message']['content']
       Rails.logger.debug body.inspect
-      
-      recipients ["mschneider3254@gmail.com"]
+
+      recipients = ["mschneider3254@gmail.com"]
 
       Zulip.zulip_private_message(sycamoreeducation, recipients, body)
       head :ok
