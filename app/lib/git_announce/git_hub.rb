@@ -22,7 +22,7 @@ module GitAnnounce
     end     
 
     def self.post_comment(id, repo, number, content)
-      uri = URI.parse("https://api.github.com/repos/schneider7/#{repo}/pulls/#{number}/comments")
+      uri = URI.parse("https://api.github.com/repos/#{ENV["GITHUB_ORG"]}/#{repo}/pulls/#{number}/comments")
       request = Net::HTTP::Post.new(uri)
       request.content_type = "application/json"
       request["Authorization"] = "token #{ENV["GITHUB_TOKEN"]}"

@@ -91,10 +91,10 @@ module GitAnnounce
                             ```quote
                             #{body}
                             ```
-                            Tag the interface bot and reply with your response, like this:
+                            In a message, tag the interface bot and copy-paste the following into your message:
 
                             ```
-                            #{id} / #{repo_name} / #{number} / Your Message Here
+                            #{id} / #{repo_name} / #{number} / 
                             ```
                             HEREDOC
 
