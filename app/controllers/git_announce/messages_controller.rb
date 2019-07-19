@@ -97,7 +97,7 @@ module GitAnnounce
           recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
 
 
-          Zulip.zulip_group_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
+          Zulip.zulip_private_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
           head :ok
 
         end
@@ -113,9 +113,11 @@ module GitAnnounce
       zulip_payload = JSON.parse(request.body.read)
 
       body = zulip_payload['message']['content']
+      Rails.logger.debug body.inspect
+      
       recipients ["mschneider3254@gmail.com"]
 
-      Zulip.zulip_group_message(sycamoreeducation, recipients, body)
+      Zulip.zulip_private_message(sycamoreeducation, recipients, body)
       head :ok
 
     end #method
