@@ -112,14 +112,13 @@ module GitAnnounce
     def zulip
       zulip_payload = JSON.parse(request.body.read)
 
-      body = zulip_payload['message']['content']
+      body  = zulip_payload['message']['content']
       parts = body.split(" / ")
-      if parts.count == 4
+      if parts.count == 3
         id      = parts[0]
-        repo    = parts[1]
-        number  = parts[2]
-        content = parts[3]
-        GitHub.post_comment(id, repo, number, content)
+        number  = parts[1]
+        content = parts[2]
+        GitHub.post_comment(id, number, content)
       end 
 
       render :json => {:response_not_required => true}
