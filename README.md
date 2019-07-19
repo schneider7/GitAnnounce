@@ -52,15 +52,17 @@ Now set up an outgoing webhook request from GitHub **on each of the repos you'd 
 
 ## Configuration
 
-For configuration, you'll need to create a few environment variables, as follows. You'll also need to create a Zulip bot.
+For configuration, you'll need to create a few environment variables, as follows. You'll also need to create 2 Zulip bots.
 
-Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigate to: `Settings > Your Bots > Add a New Bot` and make it an "Incoming Webhook" bot. [These instructions](https://zulipchat.com/api/api-keys) might be helpful.
+Zulip makes creating a bot extremely easy. Go to your Zulip account, and navigate to: `Settings > Your Bots > Add a New Bot` and make both an "Incoming Webhook" bot and and "Outgoing Webhook" bot. [These instructions](https://zulipchat.com/api/api-keys) might be helpful.
 
  - `ENV["ZULIP_DOMAIN"]` is your Zulip domain. For example, if your Zulip URL is `http://zulip.yourdomain.com`, your Zulip domain is yourdomain. This should have no spaces or capital letters.
  - `ENV["STREAM_NAME"]` is the name of the stream you'd like to post the updates to. Create this stream *before* you use the engine. e.g. "GitHub Notifications" (with the quotes, if your stream name has spaces in it).
  - `ENV["BOT_EMAIL"]` is the "email" of the bot you just made, that will post the updates.
+ - `ENV["BOT_EMAIL_2]` is the "email" of the second bot, that will be the GitHub interface bot.
  - `ENV["BOT_API_KEY"]` is the Zulip API key for the bot you just made.
  - `ENV["GITHUB_TOKEN"]` is the GitHub API access key you want to use. This is necessary because if your organization's repos are private, the `GET` requests done by GitAnnounce will fail unless you provide this authentication.
+ - `ENV["GITHUB_ORG"]` is the name of your GitHub organization. E.g. urs is SycamoreEducation.
 
  You'll also need to create a file in your Rails app, under `config/initializers` and name it `git_announce.rb`. In this file, create both a config hash and array as shown below, and populate it with your development team's information:
 

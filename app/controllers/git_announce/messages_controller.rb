@@ -76,6 +76,7 @@ module GitAnnounce
         link          = request_payload['comment']['html_url']
         replier       = request_payload['comment']['user']['login']
         body          = request_payload['comment']['body']
+        number        = request_payload['pull_request']['number']
 
         # if the comment made, was a reply to something
         if request_payload['comment'].key?("in_reply_to_id") 
@@ -90,8 +91,11 @@ module GitAnnounce
                             ```quote
                             #{body}
                             ```
-                            Tag the interface bot and reply with your response.
-                            Comment ID: #{id}, Repo: #{repo_name}
+                            Tag the interface bot and reply with your response, like this:
+
+                            ```
+                            #{id} / #{repo_name} / #{number} / Your Message Here
+                            ```
                             HEREDOC
 
           recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
@@ -114,11 +118,12 @@ module GitAnnounce
 
       body  = zulip_payload['message']['content']
       parts = body.split(" / ")
-      if parts.count == 3
+      if parts.count == 4
         id      = parts[0].to_i
-        number  = parts[1].to_i
-        content = parts[2]
-        GitHub.post_comment(id, number, content)
+        repo    = parts[1]
+        number  = parts[2].to_i
+        content = parts[3]
+        GitHub.post_comment(id, repo, number, content)
       end 
 
       render :json => {:response_not_required => true}
