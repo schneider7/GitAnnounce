@@ -98,11 +98,11 @@ module GitAnnounce
                             ```
                             HEREDOC
 
-          recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
+          # recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
 
 
-          Zulip.zulip_private_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
-          head :ok
+          # Zulip.zulip_private_message(ENV["ZULIP_DOMAIN"], recipients, private_msg)
+          # head :ok
 
         end
 
@@ -113,22 +113,22 @@ module GitAnnounce
 
     end # method
 
-    def zulip
-      zulip_payload = JSON.parse(request.body.read)
+    # def zulip
+    #   zulip_payload = JSON.parse(request.body.read)
 
-      body  = zulip_payload['message']['content']
-      parts = body.split(" / ")
-      if parts.count == 4
-        id      = parts[0].to_i
-        repo    = parts[1]
-        number  = parts[2].to_i
-        content = parts[3]
-        GitHub.post_comment(id, repo, number, content)
-      end 
+    #   body  = zulip_payload['message']['content']
+    #   parts = body.split(" / ")
+    #   if parts.count == 4
+    #     id      = parts[0].to_i
+    #     repo    = parts[1]
+    #     number  = parts[2].to_i
+    #     content = parts[3]
+    #     GitHub.post_comment(id, repo, number, content)
+    #   end 
 
-      render :json => {:response_not_required => true}
+    #   render :json => {:response_not_required => true}
 
-    end #method
+    # end #method
 
   end # class
 end # module
