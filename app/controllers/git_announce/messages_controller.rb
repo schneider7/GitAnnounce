@@ -84,14 +84,14 @@ module GitAnnounce
           replied_to    = GitAnnounce.developers[comment_owner.to_sym]
           who_replied   = GitAnnounce.developers[replier.to_sym]
 
-
           full_message  = "@**#{replied_to}** -- #{who_replied} responded to your comment on [#{title}](#{link})."
           private_msg   = <<~HEREDOC
                             #{who_replied} commented on [#{title}](#{link}) and said: 
                             ```quote
                             #{body}
                             ```
-                            Tag the interface bot and reply with your response."
+                            Tag the interface bot and reply with your response.
+                            Comment ID: #{id}, Repo: #{repo_name}
                             HEREDOC
 
           recipients    = [GitAnnounce.emails[comment_owner.to_sym], ENV["BOT_EMAIL_2"].to_s]
@@ -113,12 +113,14 @@ module GitAnnounce
       zulip_payload = JSON.parse(request.body.read)
 
       body = zulip_payload['message']['content']
-      Rails.logger.debug body.inspect
-
-      recipients = ["mschneider3254@gmail.com"]
-
-      Zulip.zulip_private_message("sycamoreeducation", recipients, body)
-      render :json => {:response_not_required => true} 
+      parts = body.split(" / ")
+      if parts.count == 4
+        id      = parts[0]
+        repo    = parts[1]
+        number  = parts[2]
+        content = parts[3]
+        GitHub.post_comment(id, repo, number, content)
+      end 
 
     end #method
 
