@@ -115,8 +115,8 @@ module GitAnnounce
       body  = zulip_payload['message']['content']
       parts = body.split(" / ")
       if parts.count == 3
-        id      = parts[0]
-        number  = parts[1]
+        id      = parts[0].to_i
+        number  = parts[1].to_i
         content = parts[2]
         GitHub.post_comment(id, number, content)
       end 
